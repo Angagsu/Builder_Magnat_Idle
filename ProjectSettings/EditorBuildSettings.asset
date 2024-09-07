@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/_BuilderMagnatIdle/Scenes/Boot.unity
+    guid: fd7fea48b51c5054ea20d3cac4304df5
+  - enabled: 1
+    path: Assets/_BuilderMagnatIdle/Scenes/Gameplay.unity
+    guid: c2de5e964aad9ec479fd5d475bdec258
+  - enabled: 1
+    path: Assets/_BuilderMagnatIdle/Scenes/MainMenu.unity
+    guid: cbc5db4637ac9154380e97fc7ff989fa
   m_configObjects: {}
