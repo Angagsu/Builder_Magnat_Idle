@@ -1,4 +1,5 @@
-﻿using R3;
+﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.Entities;
+using R3;
 using UnityEngine;
 
 namespace Assets._BuilderMagnatIdle.Scripts.Game.State.Buildings
@@ -7,12 +8,16 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State.Buildings
     {
         public int Id { get; }
         public string TypeId { get; }
+        public BuildingEntity Origin { get; }
+
 
         public ReactiveProperty<Vector3Int> Position { get; }
         public ReactiveProperty<int> Level { get; }
 
         public BuildingEntityProxy(BuildingEntity buildingEntity)
         {
+            Origin = buildingEntity;
+
             Id = buildingEntity.Id;
             TypeId = buildingEntity.TypeId;
 

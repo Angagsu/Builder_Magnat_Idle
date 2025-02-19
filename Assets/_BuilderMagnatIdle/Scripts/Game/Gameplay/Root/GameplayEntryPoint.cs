@@ -4,12 +4,16 @@ using Assets._BuilderMagnatIdle.Scripts.DI;
 using R3;
 using UnityEngine;
 using Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root.View;
+using System.Linq;
+using Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.View.UI;
+using Assets._BuilderMagnatIdle.Scripts.Game.Common;
 
 namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
         [SerializeField] private UIGameplayRootBinder sceneUIRootPrefab;
+        [SerializeField] private WorldGameplayRootBinder worldRootBinder;
 
         public Observable<GameplayExitParams> Run(DIContainer gameplayContainer, GameplayEnterParams enterParams)
         {
@@ -17,23 +21,37 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root
             var gameplayViewModelsContainer = new DIContainer(gameplayContainer);
             GameplayViewModelsRegistrations.Register(gameplayViewModelsContainer);
 
-            gameplayViewModelsContainer.Resolve<UIGameplayRootViewModel>();
-            gameplayViewModelsContainer.Resolve<WorldGameplayRootViewModel>();
-
-            var uiRoot = gameplayContainer.Resolve<UIRootView>();
-            var uiScene = Instantiate(sceneUIRootPrefab);
-            uiRoot.AttachSceneUI(uiScene.gameObject);
-
-            var exitSceneSignalSubj = new Subject<Unit>();
-            uiScene.Bind(exitSceneSignalSubj);
-
-            Debug.Log($"Gameplay Entry Point: save File name = {enterParams.SaveFileName}, level to load = {enterParams.LevelNumber}");
+            InitWorld(gameplayViewModelsContainer);
+            InitUI(gameplayViewModelsContainer);
+            
+            Debug.Log($"Gameplay Entry Point: level to load = {enterParams.MapId}");
 
             var mainMenuEnterParams = new MainMenuEnterParams("Fatality");
             var exitParams = new GameplayExitParams(mainMenuEnterParams);
-            var exitToMainMenuSceneSignal = exitSceneSignalSubj.Select(_ => exitParams);
+            var exitSceneRequest = gameplayContainer.Resolve<Subject<Unit>>(AppConstants.EXIT_SCENE_REQUEST_TAG);
+            var exitToMainMenuSceneSignal = exitSceneRequest.Select(_ => exitParams);
 
             return exitToMainMenuSceneSignal;
+        }
+
+
+        private void InitWorld(DIContainer viewsContainer)
+        {
+            worldRootBinder.Bind(viewsContainer.Resolve<WorldGameplayRootViewModel>());
+        }
+
+
+        private void InitUI(DIContainer viewsContainer)
+        {
+            var uiRoot = viewsContainer.Resolve<UIRootView>();
+            var uiSceneRootBinder = Instantiate(sceneUIRootPrefab);
+            uiRoot.AttachSceneUI(uiSceneRootBinder.gameObject);
+
+            var uiSceneRootViewModel = viewsContainer.Resolve<UIGameplayRootViewModel>();
+            uiSceneRootBinder.Bind(uiSceneRootViewModel);
+
+            var uiManager = viewsContainer.Resolve<GameplayUIManager>();
+            uiManager.OpenScreenGameplay();
         }
     }
 }

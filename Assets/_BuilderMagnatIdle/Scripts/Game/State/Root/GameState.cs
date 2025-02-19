@@ -1,4 +1,5 @@
-﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.Buildings;
+﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.GameResources;
+using Assets._BuilderMagnatIdle.Scripts.Game.State.Maps;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,14 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State.Root
     [Serializable]
     public class GameState 
     {
-        public List<BuildingEntity> Buildings;
+        public int GlobalEntityId;
+        public int CurrentMapId;
+        public List<MapState> Maps;
+        public List<ResourceData> Resources;
+
+        public int CreateEntityId()
+        {
+            return GlobalEntityId++;
+        }
     }
 }

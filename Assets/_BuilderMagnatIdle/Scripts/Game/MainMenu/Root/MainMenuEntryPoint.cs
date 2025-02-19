@@ -31,8 +31,8 @@ public class MainMenuEntryPoint : MonoBehaviour
 
 
         var levelNumber = Random.Range(0, 300);
-        var saveFileName = "ololo.save";
-        var gameplayEnterParams = new GameplayEnterParams(saveFileName, levelNumber);
+        
+        var gameplayEnterParams = new GameplayEnterParams(0);
         var mainMenuExitParams = new MainMenuExitParams(gameplayEnterParams);
         var exitToGameplaySceneSignal = exitSignalSubj.Select(_ => mainMenuExitParams);
 

@@ -9,6 +9,7 @@ using Assets._BuilderMagnatIdle.Scripts.Game.MainMenu.Root;
 using Assets._BuilderMagnatIdle.Scripts.DI;
 using Assets._BuilderMagnatIdle.Scripts.Game.GameRoot.Services;
 using Assets._BuilderMagnatIdle.Scripts.Game.State;
+using Assets._BuilderMagnatIdle.Scripts.Game.Settings;
 
 
 public class GameEntryPoint 
@@ -30,12 +31,16 @@ public class GameEntryPoint
         Object.DontDestroyOnLoad(uiRoot.gameObject);
         rootContainer.RegisterInstance(uiRoot);
 
+        var settingsProvider = new SettingsProvider();
+        rootContainer.RegisterInstance<ISettingsProvider>(settingsProvider);
+
         var gameStateProvider = new PlayerPrefsGameStateProvider();
         gameStateProvider.LoadSettingsState();
         rootContainer.RegisterInstance<IGameStateProvider>(gameStateProvider);
 
         rootContainer.RegisterFactory(_ => new SomeCommonService()).AsSingle();
     }
+
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -47,8 +52,10 @@ public class GameEntryPoint
         instance.RunGame();
     }
 
-    private void RunGame()
+    private async void RunGame()
     {
+        await rootContainer.Resolve<ISettingsProvider>().LoadGameSettings();
+
 #if UNITY_EDITOR
 
         var sceneName = SceneManager.GetActiveScene().name;
@@ -56,7 +63,7 @@ public class GameEntryPoint
         if (sceneName == Scenes.GAMEPLAY)
         {
 
-            var enterParams = new GameplayEnterParams("ddd.save", 1);
+            var enterParams = new GameplayEnterParams(1);
 
             coroutines.StartCoroutine(LoadAndStartGameplay(enterParams));
 

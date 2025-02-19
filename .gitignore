@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Google Spreadsheet Key
+*.json
+
 # Gradle cache directory
 .gradle/
 

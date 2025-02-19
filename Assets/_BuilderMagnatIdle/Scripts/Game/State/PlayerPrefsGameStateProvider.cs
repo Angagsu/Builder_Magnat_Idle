@@ -1,8 +1,7 @@
-﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.Buildings;
+﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.GameResources;
+using Assets._BuilderMagnatIdle.Scripts.Game.State.Maps;
 using Assets._BuilderMagnatIdle.Scripts.Game.State.Root;
 using R3;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,18 +74,13 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
         {
             gameStateOrigin = new GameState
             {
-                Buildings = new List<BuildingEntity>
+                Maps = new List<MapState>(),
+                Resources = new List<ResourceData>()
                 {
-                    new()
-                    {
-                        TypeId = "PRO100"
-                    },
-                    new()
-                    {
-                        TypeId = "STARIK"
-                    }
+                    new() {Amount = 0, ResourceType = ResourceType.SoftCurrency},
+                    new() {Amount = 0, ResourceType = ResourceType.HardCurrency},
+                    new() {Amount = 0, ResourceType = ResourceType.Wood}
                 }
-
             };
 
             return new GameStateProxy(gameStateOrigin);
