@@ -1,14 +1,12 @@
 ﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.Entities;
-using System;
 using System.Collections.Generic;
 
 
 namespace Assets._BuilderMagnatIdle.Scripts.Game.State.Maps
 {
-    [Serializable]
-    public class MapState
+    public class MapData
     {
-        public int Id;
-        public List<BuildingEntity> Buildings;
+        public int Id { get; set; }
+        public List<EntityData> Entities { get; set; }
     }
 }

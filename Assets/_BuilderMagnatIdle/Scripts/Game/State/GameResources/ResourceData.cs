@@ -1,12 +1,8 @@
-﻿using System;
-
-
-namespace Assets._BuilderMagnatIdle.Scripts.Game.State.GameResources
+﻿namespace Assets._BuilderMagnatIdle.Scripts.Game.State.GameResources
 {
-    [Serializable]
     public class ResourceData 
     {
-        public ResourceType ResourceType;
-        public int Amount;
+        public ResourceType ResourceType { get; set; }
+        public int Amount { get; set; }
     }
 }

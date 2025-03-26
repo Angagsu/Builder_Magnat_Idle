@@ -26,8 +26,8 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root
             container.RegisterInstance(AppConstants.EXIT_SCENE_REQUEST_TAG, new Subject<Unit>());
 
             var cmd = new CommandProcessor(gameStateProvider);
-            cmd.RegisterHandler(new CmdPlaceBuildingHandler(gameState));
-            cmd.RegisterHandler(new CmdCreateMapStateHandler(gameState, gameSettings));
+            //cmd.RegisterHandler(new CmdPlaceBuildingHandler(gameState));
+            cmd.RegisterHandler(new CmdCreateMapHandler(gameState, gameSettings));
             cmd.RegisterHandler(new CmdResourcesAddHandler(gameState));
             cmd.RegisterHandler(new CmdResourcesSpendhandler(gameState));
             container.RegisterInstance<ICommandProcessor>(cmd);
@@ -37,7 +37,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root
 
             if (loadingMap == null)
             {
-                var command = new CmdCreateMapState(loadingMapId);
+                var command = new CmdCreateMap(loadingMapId);
                 var success = cmd.Process(command);
 
                 if (!success)
@@ -48,7 +48,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root
                 loadingMap = gameState.Maps.First(m => m.Id == loadingMapId);
             }
 
-            container.RegisterFactory(_ => new BuildingsService(loadingMap.Buildings, gameSettings.BuildingsSettings, cmd)).AsSingle();
+            //container.RegisterFactory(_ => new BuildingsService(loadingMap.Buildings, gameSettings.BuildingsSettings, cmd)).AsSingle();
 
             container.RegisterFactory(_ => new ResourcesService(gameState.Resources, cmd)).AsSingle();
         }

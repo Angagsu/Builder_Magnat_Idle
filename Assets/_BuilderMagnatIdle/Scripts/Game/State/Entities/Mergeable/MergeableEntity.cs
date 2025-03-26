@@ -1,0 +1,16 @@
+﻿using R3;
+
+
+namespace Assets._BuilderMagnatIdle.Scripts.Game.State.Entities.Mergeable
+{
+    public abstract class MergeableEntity : Entity
+    {
+        public readonly ReactiveProperty<int> Level;
+
+        protected MergeableEntity(MergeableEntityData data) : base(data)
+        {
+            Level = new ReactiveProperty<int>(data.Level);
+            Level.Subscribe(newValue => data.Level = newValue);
+        }
+    }
+}

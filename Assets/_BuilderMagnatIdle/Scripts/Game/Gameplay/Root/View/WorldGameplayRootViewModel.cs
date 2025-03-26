@@ -10,14 +10,14 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root.View
 {
     public class WorldGameplayRootViewModel 
     {
-        public readonly IObservableCollection<BuildingViewModel> AllBuildings;
+       // public readonly IObservableCollection<BuildingViewModel> AllBuildings;
 
         private readonly ResourcesService resourcesService;
 
 
-        public WorldGameplayRootViewModel(BuildingsService buildingsService, ResourcesService resourcesService)
+        public WorldGameplayRootViewModel(/*BuildingsService buildingsService,*/ ResourcesService resourcesService)
         {
-            AllBuildings = buildingsService.AllBuildings;
+            //AllBuildings = buildingsService.AllBuildings;
             this.resourcesService = resourcesService;
 
             resourcesService.ObserveResource(ResourceType.SoftCurrency)

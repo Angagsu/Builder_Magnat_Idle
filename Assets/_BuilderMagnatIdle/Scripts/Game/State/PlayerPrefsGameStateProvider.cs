@@ -1,6 +1,7 @@
 ﻿using Assets._BuilderMagnatIdle.Scripts.Game.State.GameResources;
 using Assets._BuilderMagnatIdle.Scripts.Game.State.Maps;
 using Assets._BuilderMagnatIdle.Scripts.Game.State.Root;
+using Newtonsoft.Json;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,17 +23,23 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
 
         public Observable<GameStateProxy> LoadGameState()
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
+            };
+
             if (!PlayerPrefs.HasKey(GAME_STATE_KEY))
             {
                 GameState = CreatGameStateFromSettings();
-                Debug.Log("Game State created from settings " + JsonUtility.ToJson(gameStateOrigin, true));
+                Debug.Log("Game State created from settings " + JsonConvert.SerializeObject(gameStateOrigin, Formatting.Indented));
 
                 SaveGameState();
             }
             else
             {
                 var json = PlayerPrefs.GetString(GAME_STATE_KEY);
-                gameStateOrigin = JsonUtility.FromJson<GameState>(json);
+                gameStateOrigin = JsonConvert.DeserializeObject<GameState>(json);
                 GameState = new GameStateProxy(gameStateOrigin);
                 Debug.Log("Game State Loaded: " + json);
             }
@@ -51,7 +58,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
             else
             {
                 var json = PlayerPrefs.GetString(GAME_SETTINGS_STATE_KEY);
-                gameSettingsStateOrigin = JsonUtility.FromJson<GameSettingsState>(json);
+                gameSettingsStateOrigin = JsonConvert.DeserializeObject<GameSettingsState>(json);
                 SettingsState = new GameSettingsStateProxy(gameSettingsStateOrigin);
             }
 
@@ -74,7 +81,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
         {
             gameStateOrigin = new GameState
             {
-                Maps = new List<MapState>(),
+                Maps = new List<MapData>(),
                 Resources = new List<ResourceData>()
                 {
                     new() {Amount = 0, ResourceType = ResourceType.SoftCurrency},
@@ -106,7 +113,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
 
         public Observable<bool> SaveSettingsState()
         {
-            var json = JsonUtility.ToJson(gameSettingsStateOrigin, true);
+            var json = JsonConvert.SerializeObject(gameSettingsStateOrigin, Formatting.Indented);
             PlayerPrefs.SetString(GAME_SETTINGS_STATE_KEY, json);
 
             return Observable.Return(true);
@@ -114,7 +121,7 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.State
 
         public Observable<bool> SaveGameState()
         {
-            var json = JsonUtility.ToJson(gameStateOrigin, true);
+            var json = JsonConvert.SerializeObject(gameStateOrigin, Formatting.Indented);
             PlayerPrefs.SetString(GAME_STATE_KEY, json);
 
             return Observable.Return(true);

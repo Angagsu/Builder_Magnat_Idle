@@ -18,15 +18,16 @@ namespace Assets._BuilderMagnatIdle.Scripts.Game.Gameplay.Root.View
         public void Bind(WorldGameplayRootViewModel viewModel)
         {
             this.viewModel = viewModel;
-            foreach (var buildingViewModel in viewModel.AllBuildings)
-            {
-                CreateBuilding(buildingViewModel);
-            }
 
-            disposables.Add(viewModel.AllBuildings.ObserveAdd()
-                .Subscribe(e => CreateBuilding(e.Value)));
-
-            disposables.Add(viewModel.AllBuildings.ObserveRemove().Subscribe(e => DestroyBuilding(e.Value)));
+           //foreach (var buildingViewModel in viewModel.AllBuildings)
+           //{
+           //    CreateBuilding(buildingViewModel);
+           //}
+           //
+           //disposables.Add(viewModel.AllBuildings.ObserveAdd()
+           //    .Subscribe(e => CreateBuilding(e.Value)));
+           //
+           //disposables.Add(viewModel.AllBuildings.ObserveRemove().Subscribe(e => DestroyBuilding(e.Value)));
         }
 
         private void OnDestroy()
